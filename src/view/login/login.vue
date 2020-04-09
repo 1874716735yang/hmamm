@@ -38,12 +38,12 @@
               <el-input v-model="form.code" prefix-icon="el-icon-key" placeholder="请输入验证码"></el-input>
             </el-col>
             <el-col :span="8">
-              <img src="@/assets/imgs/key.jpg" class="key" alt />
+              <img :src="codeUrl" alt  @click="codelai" class="key" />
             </el-col>
           </el-row>
         </el-form-item>
         <!-- 多选框 -->
-        <el-form-item>
+        <el-form-item prop="checked">
           <el-checkbox v-model="form.checked">
             我已阅读并同意
             <el-link type="primary">用户协议</el-link>和
@@ -60,7 +60,7 @@
     </div>
     <!-- 右边 -->
     <div class="right">
-      <img src="@/assets/imgs/login_banner_ele.png" alt />
+      <img src="@/assets/imgs/login_banner_ele.png" alt="">
     </div>
   </div>
 </template>
@@ -70,6 +70,7 @@ export default {
   name: "login",
   data() {
     return {
+      codeUrl: process.env.VUE_APP_URL + "/captcha?type=login",
       form: {
         phone: "", //用户名
         password: "", //密码
@@ -79,7 +80,17 @@ export default {
       rules: {
         phone: [
           { required: true, message: "请输入手机号", trigger: "change" },
-          { min: 11, max: 11, message: "请输入正确的手机号", trigger: "change" }
+           {
+            validator: (rule, value, callback) => {
+              // 正则校验
+              let _reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+              if (_reg.test(value)) {
+                callback();
+              } else {
+                callback("请正确输入手机号");
+              }
+            }
+          }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "change" },
@@ -88,6 +99,18 @@ export default {
         code: [
           { required: true, message: "请输入验证码", trigger: "change" },
           { min: 4, max: 4, message: "请输入正确的验证码", trigger: "change" }
+        ],
+        checked: [
+         { required: true, message: "请勾选协议", trigger: "change" },
+          {
+            validator: (rule, value, callback) => {
+              if (value === true) {
+                callback();
+              } else {
+                callback("请勾选协议");
+              }
+            }
+          }
         ]
       }
     };
@@ -101,7 +124,12 @@ export default {
           this.$message.warning('请输入正确的消息')
         }
       })
-    }
+    },
+      // 点击切换验证码
+    codelai() {
+      this.codeUrl =
+        process.env.VUE_APP_URL + "/captcha?type=login&t=" + Date.now();
+    },
   },
 };
 </script>
