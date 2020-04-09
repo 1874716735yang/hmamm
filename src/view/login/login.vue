@@ -54,7 +54,7 @@
         <el-form-item>
           <el-button class="btn" type="primary" @click="loginclick">登录</el-button>
           <br />
-          <el-button class="btn" type="primary">注册</el-button>
+          <el-button class="btn" type="primary" @click="regclick">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -62,12 +62,17 @@
     <div class="right">
       <img src="@/assets/imgs/login_banner_ele.png" alt />
     </div>
+    <register ref="register"></register>
   </div>
 </template>
 
 <script>
+import register from "../register/register.vue";
 export default {
   name: "login",
+  components: {
+    register
+  },
   data() {
     return {
       form: {
@@ -83,7 +88,12 @@ export default {
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "change" },
-          { min: 6, max: 12, message: "请输入6到12位长度密码", trigger: "change" }
+          {
+            min: 6,
+            max: 12,
+            message: "请输入6到12位长度密码",
+            trigger: "change"
+          }
         ],
         code: [
           { required: true, message: "请输入验证码", trigger: "change" },
@@ -93,16 +103,21 @@ export default {
     };
   },
   methods: {
-    loginclick(){
-      this.$refs.form.validate((valid)=>{
+    // 登录
+    loginclick() {
+      this.$refs.form.validate(valid => {
         if (valid) {
-          this.$message.success('登陆成功')
+          this.$message.success("登陆成功");
         } else {
-          this.$message.warning('请输入正确的消息')
+          this.$message.warning("请输入正确的消息");
         }
-      })
+      });
+    },
+    // 注册
+    regclick() {
+      this.$refs.register.dialogFormVisible = true;
     }
-  },
+  }
 };
 </script>
 
