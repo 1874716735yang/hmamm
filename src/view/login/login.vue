@@ -69,7 +69,7 @@
 <script>
 import register from "../register/register.vue";
 import { toLogin } from "@/api/login.js";
-import { saveToken } from "@/utils/token.js";
+import { saveToken,getToken } from "@/utils/token.js";
 export default {
   name: "login",
   components: {
@@ -128,6 +128,11 @@ export default {
     };
   },
   methods: {
+    created() {
+      if(getToken()){
+        this.$router.push("/home")
+      }
+    },
     // 登录
     loginclick() {
       this.$refs.form.validate(valid => {
@@ -136,6 +141,7 @@ export default {
             this.$message.success("登陆成功");
             window.console.log(res);
             saveToken(res.data.token)
+            this.$router.push("/home")
           });
         } else {
           this.$message.warning("请输入正确的消息");
