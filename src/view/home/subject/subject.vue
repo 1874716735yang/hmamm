@@ -4,7 +4,11 @@
 
 <script>
 export default {
-
+  created() {
+    window.console.log("用户",this.$route);
+    document.title = this.$route.meta.teta
+  },
+  
 }
 </script>
 

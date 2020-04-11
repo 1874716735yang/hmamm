@@ -26,23 +26,43 @@ const router = new VueRouter({
             component: layout,
             children: [{
                 path: "chart",
-                component: chart
+                component: chart,
+                meta: {
+                    teta: "数据概览",
+                    secret: "我是还没有写完的标签"
+                }
             },
             {
                 path: "userList",
-                component: userList
+                component: userList,
+                meta: {
+                    teta: "用户列表",
+                    secret: "我是还没有写完的标签"
+                }
             },
             {
                 path: "question",
-                component: question
+                component: question,
+                meta: {
+                    teta: "题库列表",
+                    secret: "我是还没有写完的标签"
+                }
             },
             {
                 path: "business",
-                component: business
+                component: business,
+                meta: {
+                    teta: "企业列表",
+                    secret: "我是还没有写完的标签"
+                }
             },
             {
                 path: "subject",
-                component: subject
+                component: subject,
+                meta: {
+                    teta: "学科列表",
+                    secret: "我是还没有写完的标签"
+                }
             },]
         },
 
@@ -65,6 +85,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
     // 进度条结束
     NProgress.done()
+    document.title = to.meta.teta
     window.console.log(from)
 })
 // 输出 出去
