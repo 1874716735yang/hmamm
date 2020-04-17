@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogFormVisible" class="addSubject" width="600px" :show-close="true">
-    <div slot="title" class="title">{{mode=="add"?"新增企业":"编辑企业"}}</div>
+    <div slot="title" class="title">{{mode=="add"?"新增学科":"编辑学科"}}</div>
     <el-form :model="form" label-width="100px" :rules="rules" ref="form">
       <!-- 学科编号 -->
       <el-form-item label="学科编号" prop="rid">

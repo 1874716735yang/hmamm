@@ -18,7 +18,11 @@ const router = new VueRouter({
     routes: [
         {
             path: "/",
-            component: login
+            component: login,
+            meta: {
+                title: "登录",
+                rules:["超级管理员","管理员","老师","学生"]
+            }
         },
         {
             path: "/home",
@@ -29,7 +33,8 @@ const router = new VueRouter({
                 component: chart,
                 meta: {
                     teta: "数据概览",
-                    secret: "我是还没有写完的标签"
+                    rules: ["超级管理员", "管理员", "老师"],
+                    icon:"el-icon-pie-chart"
                 }
             },
             {
@@ -37,7 +42,8 @@ const router = new VueRouter({
                 component: userList,
                 meta: {
                     teta: "用户列表",
-                    secret: "我是还没有写完的标签"
+                    rules: ["超级管理员", "管理员"],
+                    icon:"el-icon-user"
                 }
             },
             {
@@ -45,7 +51,8 @@ const router = new VueRouter({
                 component: question,
                 meta: {
                     teta: "题库列表",
-                    secret: "我是还没有写完的标签"
+                    rules:["超级管理员","管理员","老师"],
+                    icon:"el-icon-edit-outline"
                 }
             },
             {
@@ -53,7 +60,8 @@ const router = new VueRouter({
                 component: business,
                 meta: {
                     teta: "企业列表",
-                    secret: "我是还没有写完的标签"
+                    rules:["超级管理员","管理员","老师"],
+                    icon:"el-icon-office-building"
                 }
             },
             {
@@ -61,7 +69,8 @@ const router = new VueRouter({
                 component: subject,
                 meta: {
                     teta: "学科列表",
-                    secret: "我是还没有写完的标签"
+                    rules:["超级管理员","管理员","老师","学生"],
+                    icon:"el-icon-notebook-2"
                 }
             },]
         },
@@ -72,14 +81,24 @@ const router = new VueRouter({
 // 进入前守卫
 // 导入nprogress   start()开启    done()结束
 import NProgress from 'nprogress'
+import { Message } from 'element-ui';
 // 导入nprogress对应css
 import 'nprogress/nprogress.css'
+import {removeToken} from '@/utils/token.js'
+import store from '../store/index.js'
 // css需要导入
 router.beforeEach((to, from, next) => {
     // 进度条开启
     NProgress.start()
     next()
-
+if (to.meta.rules.includes(store.state.role)) {
+    next()
+} else {
+    Message.warning("您无权访问该页面！");
+    // this.$message.warning("您无权访问该页面！");
+    removeToken();
+    next("/")
+}
 })
 // 进入后守卫
 router.afterEach((to, from) => {

@@ -34,7 +34,16 @@
           :collapse="collapse"
           class="menuTransition"
         >
-          <el-menu-item index="/home/chart">
+          <el-menu-item
+            :index="'/home/'+item.path"
+            v-for="(item, index) in $router.options.routes[1].children"
+            :key="index"
+            v-show="item.meta.rules.includes($store.state.role)"
+          >
+            <i :class="item.meta.icon"></i>
+            <span slot="title">{{item.meta.teta}}</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="/home/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
           </el-menu-item>
@@ -53,7 +62,7 @@
           <el-menu-item index="/home/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item>-->
         </el-menu>
       </el-aside>
       <el-main class="main">
@@ -85,7 +94,20 @@ export default {
       this.userInfo = res.data;
       this.userInfo.avatar =
         process.env.VUE_APP_URL + "/" + this.userInfo.avatar;
-        this.$store.state.userInfo = this.userInfo
+      this.$store.state.userInfo = this.userInfo;
+      this.$store.state.role = res.data.role;
+      if (res.data.status == 0) {
+        this.$message.warning("您账号已让禁用，请联系管理员");
+        removeToken();
+        this.$router.push("/");
+      } else {
+        window.console.log("当前路由的元信息：", this.$route.meta);
+        if (!this.$route.meta.rules.includes(res.data.role)) {
+          this.$message.warning("您无权访问该页面！");
+          removeToken();
+          this.$router.push("/");
+        }
+      }
       window.console.log("用户信息：", res);
     });
   },
@@ -154,8 +176,8 @@ export default {
     // 初始宽度
     width: 160px;
   }
-  .main{
-    background-color: #E8E9EC;
+  .main {
+    background-color: #e8e9ec;
   }
 }
 </style>

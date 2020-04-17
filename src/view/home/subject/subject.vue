@@ -20,7 +20,7 @@
         <el-form-item>
           <el-button type="primary" @click="onSubmit">搜索</el-button>
           <el-button @click="reset">清除</el-button>
-          <el-button type="primary" @click="addSubject">
+          <el-button type="primary" @click="addSubject" v-if="$store.state.role!='学生'">
             <span>+</span> 新增学科
           </el-button>
         </el-form-item>
@@ -42,7 +42,7 @@
         <el-table-column prop="zip" label="状态">
           <template slot-scope="scope">{{scope.row.status==1?"启用":"禁用"}}</template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作">
+        <el-table-column fixed="right" label="操作" v-if="$store.state.role!='学生'">
           <template slot-scope="scope">
             <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
             <el-button
@@ -50,7 +50,7 @@
               type="text"
               size="small"
             >{{scope.row.status==0?"启用":"禁用"}}</el-button>
-            <el-button @click="remnet(scope.row.id)" type="text" size="small">删除</el-button>
+            <el-button @click="remnet(scope.row.id)" type="text" size="small" v-if="$store.state.role.includes('管理员')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
