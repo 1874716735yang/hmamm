@@ -21,6 +21,7 @@ const router = new VueRouter({
             component: login,
             meta: {
                 title: "登录",
+                teta: "登录",
                 rules:["超级管理员","管理员","老师","学生"]
             }
         },
